@@ -35,6 +35,11 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 const { Form, Question, Option } = sequelize.models;
 
+// Relations
+Question.belongsToMany(Option, {through: 'Question_option'})
+Option.belongsToMany(Question, {through: 'Question_option'})
+Form.belongsToMany(Question, {through: 'Form_question'})
+Question.belongsToMany(Form, {through: 'Form_question'})
 
 module.exports = {
   ...sequelize.models,
