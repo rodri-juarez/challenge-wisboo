@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
     });
 
     sequelize.define('Option', {
-        id: {
+        id: {  
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
