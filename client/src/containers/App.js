@@ -1,18 +1,19 @@
 import CreateForm from "../components/createForm/createForm";
 import PreviewForm from "../components/previewForm/previewForm";
-import useForm from "../hooks/useForm";
+import useForm from "../utils/useForm";
 import style from "./App.module.css";
 
 function App() {
   const {
     form,
     error,
-    handleSelect,
+    selectTypeQuestion,
     handleForm,
     addQuestion,
+    upgradeQuestions,
     deleteQuestion,
-    createPoll,
-    setForm
+    validateError,
+    createSurvey,
   } = useForm();
 
   return (
@@ -20,12 +21,13 @@ function App() {
       <CreateForm
         form={form}
         error={error}
-        setForm={setForm}
-        handleSelect={handleSelect}
+        selectTypeQuestion={selectTypeQuestion}
         handleForm={handleForm}
         addQuestion={addQuestion}
+        upgradeQuestions={upgradeQuestions}
         deleteQuestion={deleteQuestion}
-        createPoll={createPoll}
+        validateError={validateError}
+        createSurvey={createSurvey}
       />
       <PreviewForm form={form} />
     </div>

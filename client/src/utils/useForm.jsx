@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
+import { validation } from "./validation";
 
 export default function useForm() {
   const [form, setForm] = useState({
@@ -8,37 +9,43 @@ export default function useForm() {
     description: "",
     questions: [],
   });
-  const [error, setError] = useState({}); 
-  
+  const [error, setError] = useState();
 
   const handleForm = (event) => {
     setForm({
       ...form,
       [event.target.name]: event.target.value,
     });
+    validateError(form)
   };
 
-  const handleSelect = (event) => {
+  const selectTypeQuestion = (event) => {
     form.questions[event.target.id][event.target.name] = event.target.value;
     setForm({
-        ...form,
-        questions: form.questions,
-      }
-    );
-    
+      ...form,
+      questions: form.questions,
+    });
+    validateError(form)
   };
 
   const addQuestion = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     setForm({
       ...form,
       questions: [
         ...form.questions,
-        { question_type: "", text: "", options: [] }
+        { question_type: "", text: "", options: [] },
       ],
     });
+    validateError(form)
   };
 
+  const upgradeQuestions = (questions) => {
+    setForm({
+      ...form,
+      questions: questions,
+    });
+  };
 
   const deleteQuestion = (event) => {
     form.questions[event.target.name] = null;
@@ -46,25 +53,30 @@ export default function useForm() {
       ...form,
       questions: form.questions,
     });
-  }; 
+    validateError(form)
+  };
 
-  const createPoll = async (event) => {
+  const validateError = (form) => {
+    setError(validation(form))
+  }
+
+  const createSurvey = async (event) => {
     event.preventDefault();
     form.questions = form.questions.filter((element) => element !== null);
-    
+
     if (Object.values(error).length > 0) {
       swal({
-        title: "Completar todos los campos de la encuesta",
+        title: "Complete all fields of the survey",
         icon: "warning",
       });
     } else {
       try {
-        let id = await axios.post("http://localhost:3001/forms", {
+        let response = await axios.post("http://localhost:3001/forms", {
           form: form,
         });
         swal(
-          "Encuesta creada",
-          `Id de la encuesta "${id.data.formId}"`,
+          "Survey created",
+          `Survey id "${response.data.id}"`,
           "success"
         );
 
@@ -81,15 +93,16 @@ export default function useForm() {
       }
     }
   };
-  
+
   return {
     form,
     error,
-    setForm,
-    handleSelect,
+    selectTypeQuestion,
     handleForm,
     addQuestion,
+    upgradeQuestions,
     deleteQuestion,
-    createPoll,
+    createSurvey,
+    validateError
   };
 }
