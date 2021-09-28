@@ -17,11 +17,12 @@
     "pg": "^8.7.1",
     "sequelize": "^6.6.5",
     "supertest": "^6.1.6",
+    "supertest-as-promised": "^4.0.2",
     "supertest-session": "^4.1.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "mocha -w ./tests/**/*.spec.js",
+    "test": "mocha -w ./tests/forms.spec.js",
     "start": "nodemon index.js"
   },
   "keywords": [],
