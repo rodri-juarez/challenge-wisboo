@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Form } = require("../db");
+const { Form, Question, Option } = require("../db");
 
 router.get("/forms/:id", async (req, res) => {
   const id = req.params.id;
@@ -11,7 +11,7 @@ router.get("/forms/:id", async (req, res) => {
   if (form === null) {
     return res.status(400).json({ message: "Form does not exist" });
   }
-
+ 
   const response = {
     id: form.dataValues.id,
     name: form.dataValues.name,
@@ -29,62 +29,55 @@ router.get("/forms/:id", async (req, res) => {
 
     if (element.dataValues.question_type.toLowerCase() !== "text") {
       element.Options.map((element, indexOption) => {
-        response.questions[index].options.unshift(
+        response.questions[index].options.push(
           form.Questions[index].Options[indexOption].dataValues.option
         );
       });
     }
   });
-
   return res.json(response);
 });
 
 router.post("/forms", async (req, res) => {
   const { form } = req.body;
-
+  const { name, description, questions } = form;
   if (!form) {
     return res.status(400).json({ error: "Form not found in request" });
   }
-  if (!form.name || !form.description || form.questions.length < 1) {
+  if (!name || !description || questions.length < 1) {
     return res
       .status(400)
       .json({ error: "Fields or questions are missing from the form" });
   }
-
   try {
     let newForm = await Form.create({
-      name: form.name,
-      description: form.description,
+      name: name,
+      description: description,
     });
 
     while (form.questions.length) {
       let question = form.questions.shift();
-
       let newQuestion = await Question.create({
         question_type: question.question_type,
         text: question.text,
       });
 
-      await newForm.addQuestions(newQuestion);
-
       while (question.options.length) {
         let option = question.options.pop();
-
         let newOption = await Option.create({
           option: option,
         });
-
         await newQuestion.addOption(newOption);
       }
+      await newForm.addQuestions(newQuestion);
     }
-
-    let Form = await Form.findAll();
+     
     return res.json({
       message: "Form created",
-      formId: Form[Form.length - 1].dataValues.id,
+      id: newForm.dataValues.id,
     });
   } catch (error) {
-    res.status(500).json({ message: "Can't saving form in DB", error: error });
+    res.status(500).json({ message: "Error saving form in db", error: error });
   }
 });
 
