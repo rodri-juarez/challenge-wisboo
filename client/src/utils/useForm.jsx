@@ -9,7 +9,7 @@ export default function useForm() {
     description: "",
     questions: [],
   });
-  const [error, setError] = useState();
+  const [error, setError] = useState({});
 
   const handleForm = (event) => {
     setForm({
@@ -47,8 +47,8 @@ export default function useForm() {
     });
   };
 
-  const deleteQuestion = (event) => {
-    form.questions[event.target.name] = null;
+  const deleteQuestion = (index) => {
+    form.questions[index] = null;
     setForm({
       ...form,
       questions: form.questions,
@@ -87,7 +87,7 @@ export default function useForm() {
         });
       } catch (error) {
         swal({
-          title: "Error al crear la encuesta",
+          title: "Error creating survey",
           icon: "warning",
         });
       }

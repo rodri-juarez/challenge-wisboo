@@ -16,7 +16,7 @@ export const validation = (form) => {
       form.questions[i].question_type !== "text"
     ) {
       if (form.questions[i].options.length === 0)
-        error.option = "Add option in selection questions";
+        error.option = "All multiple/simple questions must have at least 1 option";
       for (let j = 0; j < form.questions[i].options.length; j++) {
         if (form.questions[i].options[j] === undefined)
           error.option = "All options must be complete";
