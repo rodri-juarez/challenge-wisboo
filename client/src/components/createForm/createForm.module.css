@@ -147,9 +147,20 @@ form {
 }
 
 .buttonDelete {
-  border: none;
+  border: red 2px solid;
+  border-radius: 50%;
+  height: 50%;
+  width: 16px;
   background-color: transparent;
-  margin-top: 8px;
+  margin: 10px;
+  margin-top: 12%;
+  padding-left: 6px;
+  font-size: 10px;
+  color: red;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .createSurvey {
