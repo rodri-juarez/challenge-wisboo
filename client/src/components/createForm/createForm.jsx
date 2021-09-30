@@ -1,20 +1,22 @@
+import { useContext } from "react";
+import FormContext from "../../context/formContext";
 import style from "./createForm.module.css";
 import Question from "./question";
 import { IconContext } from "react-icons";
 import { AiFillDelete } from "react-icons/ai";
 import { BsPlusCircleFill } from "react-icons/bs";
 
-function CreateForm({
-  form,
-  error,
-  selectTypeQuestion,
-  handleForm,
-  addQuestion,
-  upgradeQuestions,
-  deleteQuestion,
-  createSurvey,
-  validateError,
-}) {
+function CreateForm() {
+  const {
+    form,
+    error,
+    handleForm,
+    selectTypeQuestion,
+    addQuestion,
+    deleteQuestion,
+    createSurvey,
+  } = useContext(FormContext);
+
   return (
     <section className={style.section}>
       <header className={style.header}>Survey creation</header>
@@ -28,13 +30,7 @@ function CreateForm({
             onChange={handleForm}
           />
         </div>
-        {error.name ? (
-          <div
-          className={style.error}
-          >
-            {error.name}
-          </div>
-        ) : null}
+        {error.name ? <div className={style.error}>{error.name}</div> : null}
         <div className={style.description}>
           <input
             placeholder="Description"
@@ -45,20 +41,13 @@ function CreateForm({
           />
         </div>
         {error.description ? (
-          <div
-          className={style.error}
-          >
-            {error.description}
-          </div>
+          <div className={style.error}>{error.description}</div>
         ) : null}
         {form.questions.map(
           (element, index) =>
             element !== null && (
-              <div
-              className={style.formQuestions}
-              key={index}
-              >
-                <div className={style.questionContainer} >
+              <div className={style.formQuestions} key={index}>
+                <div className={style.questionContainer}>
                   {element === null ? null : (
                     <div className={style.divQuestion}>
                       <div className={style.question}>
@@ -84,9 +73,6 @@ function CreateForm({
                           <Question
                             type={element.question_type}
                             index={index}
-                            upgradeQuestions={upgradeQuestions}
-                            form={form}
-                            validateError={validateError}
                           />
                         </div>
                       </div>
@@ -96,7 +82,7 @@ function CreateForm({
                 <button
                   className={style.deleteQuestion}
                   name={index}
-                  onClick={()=> deleteQuestion(index)}
+                  onClick={() => deleteQuestion(index)}
                 >
                   {" "}
                   <IconContext.Provider
@@ -120,18 +106,10 @@ function CreateForm({
           Add question
         </button>
         {error.question ? (
-          <div
-          className={style.error}
-          >
-            {error.question}
-          </div>
+          <div className={style.error}>{error.question}</div>
         ) : null}
         {error.option ? (
-          <div
-          className={style.error}
-          >
-            {error.option}
-          </div>
+          <div className={style.error}>{error.option}</div>
         ) : null}
 
         <div>

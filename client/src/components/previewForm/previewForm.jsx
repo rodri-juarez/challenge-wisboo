@@ -1,6 +1,10 @@
 import style from "./previewForm.module.css";
+import { useContext } from "react";
+import FormContext from "../../context/formContext";
 
-export default function PreviewForm({ form }) {
+export default function PreviewForm() {
+  const { form } = useContext(FormContext);
+
   return (
     <section className={style.section}>
       <header className={style.header}>

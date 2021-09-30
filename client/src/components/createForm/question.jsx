@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import FormContext from "../../context/formContext";
 import style from "./createForm.module.css";
 
-
-export default function Question({
-  type,
-  index,
-  upgradeQuestions,
-  validateError,
-  form,
-}) {
+export default function Question({ type, index }) {
   const [options, setOptions] = useState({});
+  const { form, upgradeQuestions, validateError } = useContext(FormContext);
 
   const handleChange = (event) => {
     setOptions({
